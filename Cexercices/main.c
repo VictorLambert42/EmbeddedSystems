@@ -3,14 +3,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int checksum(int* CK_A, int* CK_B,int datas[]){
+void checksum(int* CK_A, int* CK_B,int datas[]){
     int tmp1 = 0;
     int tmp2 = 0;
-    for(int I=0;I < (int)sizeof(datas);I++){
-        tmp1 = tmp1 + datas[I];
+    int* tmp = sizeof(datas);
+    printf("%d", &tmp);
+    for(int i=0;i < &tmp;i++){
+        tmp1 = tmp1 + datas[i];
         tmp2 = tmp2 + tmp1;
     }
     printf(tmp1, tmp2);
+}
+
+struct gpsHeader{
+    unsigned char sync1, sync2, class, id;
+    unsigned short length;
+}
+
+struct{
+    uint32_t iTow, tAcc;
+    int32_t nano;
+    unsigned short year;
+    unsigned char month, day, hour, min, sec, valid;
 }
 
 int main(){
@@ -73,9 +87,10 @@ int main(){
                         datas[10] = min;
                         datas[11] = sec;
 
-                        checksum(&CK_A, &CK_B, datas);
-                        
                         fprintf(csv, "%d,%d,%d,%d,%d,%d,%d,%d,%d\n",iTOW,tAcc,nano,y,m,d,hour,min,sec);
+                        
+                        // checksum(&CK_A, &CK_B, datas);
+                        
                         
                     }
                 }
